@@ -4,13 +4,13 @@ date: 2026-01-08
 categories:
   - Deployment
 ---
-
+[Main Readme](./../README.md)
 ## Steps to deploy our frontend on AWS
 
 1. Go AWS dashboard and select:
    - `Console Home > All Services > AWS AppRunner`
 
-   ![AWS AppRunner Dashboard](../assets/screenshots/CreateServiceAwsAppRunner.png)
+   ![AWS AppRunner Dashboard](./../assets/screenshots/CreateServiceAwsAppRunner.png)
 
 2. In AWS AppRunner Dashboard:
    - Create a Service
@@ -31,7 +31,7 @@ categories:
    - Start command: `npm run`
    - Port: **5000** (as our app runs on 5000)
 
-   ![Configure Build in AWS AppRunner](../assets/screenshots/ConfigureBuildAwsAppRunner.png)
+   ![Configure Build in AWS AppRunner](./../assets/screenshots/ConfigureBuildAwsAppRunner.png)
 
 5. In Configure Service:
    - Leave settings as is
