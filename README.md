@@ -1,6 +1,6 @@
 # 👋 Hey, Welcome to My Engineering Blog
 
-I’m Shashank — a backend/system dev who’s been building stuff in the wild for almost a decade.  
+I’m Shahsank Shekhar — a backend/system dev who’s been building stuff in the wild for almost a decade.  
 My roots are in C++ (Qt, radios, embedded-ish chaos), but I’ve been branching out into distributed systems, Rust, Go, and whatever else helps ship better software.
 
 No corporate fluff here — just practical engineering notes, experiments, and honest takes.
@@ -21,8 +21,29 @@ Expect topics like:
 - Distributed systems & networking  
 - Debugging + profiling  
 - Performance & observability  
+- Deployment guides: [Steps to Deploy Frontend on AWS](./_posts/2026-01-08-deploy-frontend-aws.md)
 
 Basically: **anything that helps build fast, reliable, “pls-don’t-wake-me-at-night” software.**
+
+---
+
+## 📂 Project Structure
+
+This repository is organized as follows:
+
+- **guides/**: Contains deployment and setup guides.
+- **posts/**: Blog posts written in Markdown.
+- **assets/**: Static assets like images and screenshots.
+  - **images/**: General images used across the blog.
+  - **screenshots/**: Screenshots for specific posts.
+
+Each folder contains its own README for more details.
+
+---
+
+## 📖 Quick Links
+
+- [Steps to Deploy Frontend on AWS](./posts/2026-01-08-deploy-frontend-aws.md)
 
 ---
 
