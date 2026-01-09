@@ -1,93 +1,149 @@
-# 👋 Hey, Welcome to My Engineering Blog
+# 🚀 Shashank Shekhar's Engineering Blog
 
-I'm Shashank Shekhar — a backend/system dev who's been building stuff in the wild for almost a decade.
-My roots are in C++ (Qt, radios, embedded-ish chaos), but I've been branching out into distributed systems, Rust, Go, and whatever else helps ship better software.
-
-No corporate fluff here — just practical engineering notes, experiments, and honest takes.
+**Building reliable systems at scale, one deep-dive at a time.**
 
 ---
 
-## 🚀 What This Blog Is About
+## 👋 About Me
 
-This space is where I document the tech I'm exploring, breaking, and rewriting at 2AM.
+I'm **Shashank Shekhar**, a seasoned backend and systems engineer with nearly a decade of experience shipping production software in demanding environments. My journey spans from low-level C++ systems (Qt, embedded devices, radio systems) to modern distributed architectures.
 
-Expect topics like:
+**Core Expertise:**
+- **Systems Programming**: C++, Rust, Go
+- **Distributed Systems**: Design, scaling, reliability
+- **Performance Engineering**: Profiling, optimization, observability
+- **Infrastructure**: Cloud deployment, DevOps, automation
 
-- Systems design & low-level patterns
-- Rust (ownership brain-melts included)
-- Go for fast iteration & tooling
-- C++ war stories
-- Tooling: Cargo, Bazel, build systems
-- Distributed systems & networking
-- Debugging + profiling
-- Performance & observability
-- [Setting Up mdBook for Personal Blogging](./mdbook-setup.md) (vs Jekyll pain)
-- Deployment guides: [Steps to Deploy Frontend on AWS](./aws-deployment.md)
-
-Basically: **anything that helps build fast, reliable, "pls-don't-wake-me-at-night" software.**
+I'm passionate about writing software that **actually works** in production—not just in tutorials.
 
 ---
 
-## 📂 Project Structure
+## 🎯 What You'll Find Here
 
-This book is organized as follows:
+This blog is my digital workshop where I document real engineering challenges, solutions, and insights. No marketing fluff, just practical knowledge from building systems that handle real load.
 
-- **Introduction**: Welcome and overview (you're here!)
-- **[Setting Up mdBook for Personal Blogging](./mdbook-setup.md)**: Why and how to use mdBook vs Jekyll
-- **AWS Deployment**: Step-by-step guides for deploying applications on AWS
-- **Future Chapters**: More technical deep-dives and experiments
+### Core Topics
 
----
+#### **Systems Architecture & Design**
+- [Real-Time vs Non-Real-Time Systems](./real-time-systems.md) — Deep C++ & Linux analysis with working code
+- Low-level system patterns and anti-patterns
+- Performance-critical application design
 
-## 🦀 Rust Journey (One Chapter)
+#### **Programming Languages & Tools**
+- **Rust**: Ownership battles, FFI adventures, systems programming
+- **Go**: Fast iteration, tooling, microservices
+- **C++**: War stories from production systems
+- **Build Systems**: Cargo, Bazel, CMake, and modern tooling
 
-Rust isn't the whole story — but it's definitely a fun one.
+#### **Distributed Systems & Infrastructure**
+- Networking, consensus, fault tolerance
+- Cloud architecture and deployment
+- Observability and monitoring at scale
 
-I'm tracking:
-- Migrating from C++ → Rust mindset
-- Unsafe Rust & FFI playgrounds
-- System-level problem-solving
-- Design patterns, idiomatic takes, and anti-patterns
-- Real issues I hit + how I fixed them
-- When Rust shines vs when I just reach for Go instead
-
-If you're curious about Rust from a systems perspective, you'll probably vibe.
-
----
-
-## 🧠 Why I'm Doing This
-
-Simple:
-I learn best when I explain.
-And I'm tired of keeping notebooks full of notes that no one else ever sees.
-
-So this blog is:
-- My tech brain dump
-- A journal of experiments
-- A place to share mistakes (so you don't repeat them)
-- Somewhere to rant when a compiler ruins my day
-
-If any of that sounds like your jam, stick around.
+#### **Development Workflow & Tools**
+- [Setting Up mdBook for Personal Blogging](./mdbook-setup.md) — Why I switched from Jekyll
+- Debugging techniques and profiling
+- Deployment automation: [AWS App Runner Guide](./aws-deployment.md)
 
 ---
 
-## 🧩 Who This Blog Is For
+## 📚 Book Structure
 
-- Engineers who like low-level work
-- C++ folks looking sideways at Rust
-- Go devs breaking into systems
-- Anyone building large, high-perf services
-- Curious people who love learning from real-world examples
-
-If you care about clarity, correctness, and craft — you'll fit in.
+- **Introduction** ← You're here!
+- **[Setting Up mdBook for Personal Blogging](./mdbook-setup.md)** — Modern blogging without the Jekyll hassle
+- **[Real-Time vs Non-Real-Time Systems](./real-time-systems.md)** — Technical deep-dive with code examples
+- **[AWS Deployment](./aws-deployment.md)** — Production-ready frontend deployment
+- **Future Chapters** — More deep-dives and experiments
 
 ---
 
-## 📬 Hit Me Up
+## 💼 Professional Services
 
-Questions, ideas, corrections, or just want to chat?
-Drop an issue, DM, or carrier pigeon — whatever works.
+**I'm available for consulting and technical partnerships.**
 
-Let's build cool stuff and not stress-eat in production.
+### Consulting Services
+- **System Architecture Review** — Performance bottlenecks, scalability issues
+- **Technology Migration** — Legacy to modern stacks (C++ to Rust, monolith to microservices)
+- **Performance Optimization** — Profiling, tuning, and monitoring setup
+- **Team Mentoring** — Best practices, code reviews, technical leadership
 
-— Shashank(shekhar.jaigaon@gmail.com)
+### Partnership Opportunities
+- **Technical Writing** — Documentation, blog posts, technical content
+- **Open Source Collaboration** — Systems programming, performance tools
+- **Speaking Engagements** — Conferences, meetups, workshops
+- **Code Review Services** — Architecture and implementation feedback
+
+### Industries I Work With
+- FinTech & Trading Systems (real-time requirements)
+- IoT & Embedded Systems
+- Cloud Infrastructure & DevOps
+- High-Performance Computing
+
+**Rate: $150-300/hour depending on engagement type**
+
+---
+
+## 🎯 Who This Is For
+
+### Primary Audience
+- **Systems Engineers** building performance-critical applications
+- **Senior Developers** migrating from C++/Java to Rust/Go
+- **Platform Engineers** designing scalable infrastructure
+- **Engineering Leaders** seeking technical strategy guidance
+
+### You Might Enjoy This If You
+- Care deeply about system performance and reliability
+- Enjoy reading code more than marketing copy
+- Build systems that can't afford downtime
+- Want honest takes on technology choices
+- Value practical experience over theoretical knowledge
+
+---
+
+## 📈 Recent Focus Areas
+
+### Current Deep Dives
+- **Real-time Systems**: Predictable latency in C++ & Linux
+- **Rust Adoption**: Production migration strategies
+- **Performance Engineering**: Systematic optimization approaches
+- **Modern Tooling**: Developer experience improvements
+
+### Upcoming Topics
+- Memory management patterns in Rust
+- Distributed consensus algorithms
+- Linux kernel bypass techniques
+- Container orchestration for high-performance workloads
+
+---
+
+## 🤝 Let's Connect
+
+I'm always interested in meaningful technical discussions and collaboration opportunities.
+
+### Get In Touch
+- **Email**: shekhar.jaigaon@gmail.com
+- **GitHub**: Open issues or discussions on my repos
+- **LinkedIn**: Let's connect for professional opportunities
+- **Consulting**: Available for technical consulting and partnerships
+
+### Collaboration Ideas
+- Open source contributions
+- Technical writing projects
+- Speaking opportunities
+- Code review partnerships
+- Architecture consulting
+
+---
+
+## 🎉 Why Read This Blog?
+
+Because most tech content is either:
+- **Too basic** — "Hello World" tutorials that don't help production code
+- **Too academic** — Theoretical concepts without real-world application
+- **Too promotional** — Marketing disguised as technical content
+
+**This blog bridges that gap** — practical, in-depth content from someone who's been in the trenches.
+
+Ready to dive deep? Let's build something reliable.
+
+— **Shashank Shekhar**
