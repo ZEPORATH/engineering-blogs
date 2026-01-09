@@ -1,49 +1,50 @@
-# 👋 Hey, Welcome to My Engineering Blog
+# 👋 Shashank's Engineering Blog
 
-I’m Shahsank Shekhar — a backend/system dev who’s been building stuff in the wild for almost a decade.  
-My roots are in C++ (Qt, radios, embedded-ish chaos), but I’ve been branching out into distributed systems, Rust, Go, and whatever else helps ship better software.
+This repository contains my engineering blog, now powered by [mdBook](https://rust-lang.github.io/mdBook/)!
+
+## 🚀 About This Blog
+
+I'm Shashank Shekhar — a backend/system dev who's been building stuff in the wild for almost a decade.
+My roots are in C++ (Qt, radios, embedded-ish chaos), but I've been branching out into distributed systems, Rust, Go, and whatever else helps ship better software.
 
 No corporate fluff here — just practical engineering notes, experiments, and honest takes.
 
----
+## 📖 Reading the Blog
 
-## 🚀 What This Blog Is About
+This blog is built with mdBook. You can:
 
-This space is where I document the tech I’m exploring, breaking, and rewriting at 2AM.
+- **Read online**: The book is automatically built and hosted (link coming soon)
+- **Build locally**: See instructions below
+- **Contribute**: Submit issues or pull requests with new content
 
-Expect topics like:
+## 🛠️ Building Locally
 
-- Systems design & low-level patterns  
-- Rust (ownership brain-melts included)  
-- Go for fast iteration & tooling  
-- C++ war stories  
-- Tooling: Cargo, Bazel, build systems  
-- Distributed systems & networking  
-- Debugging + profiling  
-- Performance & observability  
-- Deployment guides: [Steps to Deploy Frontend on AWS](./_posts/2026-01-08-deploy-frontend-aws.md)
+### Prerequisites
+- [Rust](https://rustup.rs/) (for mdBook)
+- mdBook (install with `cargo install mdbook`)
 
-Basically: **anything that helps build fast, reliable, “pls-don’t-wake-me-at-night” software.**
+### Build and Serve
+```bash
+# Install mdBook if you haven't already
+cargo install mdbook
 
----
+# Build the book (includes static assets like images)
+./build.sh
+
+# Or build manually:
+mdbook build && cp static/*.png book/
+
+# Serve locally for development
+mdbook serve
+```
 
 ## 📂 Project Structure
 
-This repository is organized as follows:
-
-- **guides/**: Contains deployment and setup guides.
-- **posts/**: Blog posts written in Markdown.
-- **assets/**: Static assets like images and screenshots.
-  - **images/**: General images used across the blog.
-  - **screenshots/**: Screenshots for specific posts.
-
-Each folder contains its own README for more details.
-
----
-
-## 📖 Quick Links
-
-- [Steps to Deploy Frontend on AWS](./posts/2026-01-08-deploy-frontend-aws.md)
+- **src/**: mdBook source files (chapters in Markdown)
+- **book/**: Generated HTML output (after building)
+- **book.toml**: mdBook configuration
+- **static/**: Static assets like images and screenshots
+- **build.sh**: Custom build script for assets
 
 ---
 
