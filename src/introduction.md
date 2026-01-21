@@ -6,7 +6,7 @@
 
 ## 👋 About Me
 
-I'm **Shashank Shekhar**, a seasoned backend and systems engineer with nearly a decade of experience shipping production software in demanding environments. My journey spans from low-level C++ systems (Qt, embedded devices, radio systems) to modern distributed architectures.
+I'm **Shahsank Shekhar**, a seasoned backend and systems engineer with nearly a decade of experience shipping production software in demanding environments. My journey spans from low-level C++ systems (Qt, embedded devices, radio systems) to modern distributed architectures.
 
 **Core Expertise:**
 - **Systems Programming**: C++, Rust, Go
@@ -53,6 +53,7 @@ This blog is my digital workshop where I document real engineering challenges, s
 - **[Setting Up mdBook for Personal Blogging](./mdbook-setup.md)** — Modern blogging without the Jekyll hassle
 - **[Real-Time vs Non-Real-Time Systems](./real-time-systems.md)** — Technical deep-dive with code examples
 - **[AWS Deployment](./aws-deployment.md)** — Production-ready frontend deployment
+- **[C++ Interview Preparation Notes](./cpp-interview-notes.md)** - Quick lookup for C++ questionare
 - **Future Chapters** — More deep-dives and experiments
 
 ---
@@ -79,7 +80,7 @@ This blog is my digital workshop where I document real engineering challenges, s
 - Cloud Infrastructure & DevOps
 - High-Performance Computing
 
-**Rate: $150-300/hour depending on engagement type**
+**Rate: $25-$50/hour depending on engagement type**
 
 ---
 
