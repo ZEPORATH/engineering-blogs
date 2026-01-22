@@ -3,3 +3,7 @@ title = "Shashank's Engineering Blog"
 authors = ["Shashank Shekhar"]
 description = "Bookmark this to keep an eye on my project/journey updates!"
 language = "en"
+
+[output.html]
+additional-css = ["theme/custom.css"]
+additional-js = ["theme/header.js"]
