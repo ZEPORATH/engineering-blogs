@@ -667,19 +667,115 @@ void f(T& t) { t.f(); }
 
 ### STL Iterators
 
-*Upcoming*
+STL iterators are objects (like pointers) used to traverse containers in the Standard Template Library (vector, list, map, etc). They provide a uniform interface for accessing elements.
+
+- **Types:** `input_iterator`, `output_iterator`, `forward_iterator`, `bidirectional_iterator`, `random_access_iterator`.
+- **Basic Usage Example:**
+
+```cpp
+#include <vector>
+#include <iostream>
+std::vector<int> v = {1, 2, 3};
+for (std::vector<int>::iterator it = v.begin(); it != v.end(); ++it) {
+    std::cout << *it << std::endl;
+}
+```
+
+Or, with C++11:
+
+```cpp
+for (auto it = v.begin(); it != v.end(); ++it) {
+    std::cout << *it << std::endl;
+}
+```
+
+- **Reverse Iterators:** Use `rbegin()` and `rend()` for reverse traversal.
+- **Const Iterators:** Use `cbegin()`, `cend()` for read-only access.
+
+---
 
 ### Custom Iterators
 
-*Upcoming*
+You can define your own iterator for custom containers by providing basic functionality: dereferencing (`operator*`), increment (`operator++`), comparison, and traits.
+
+**Minimal Input Iterator Example:**
+```cpp
+struct MyContainer {
+    int data[3] = {10, 20, 30};
+    struct Iterator {
+        int* ptr;
+        // Iterator traits
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = int;
+        using difference_type = std::ptrdiff_t;
+        using pointer = int*;
+        using reference = int&;
+        // Core operations
+        Iterator(int* p) : ptr(p) {}
+        int& operator*() const { return *ptr; }
+        Iterator& operator++() { ++ptr; return *this; }
+        bool operator!=(const Iterator& other) const { return ptr != other.ptr; }
+    };
+
+    Iterator begin() { return Iterator(data); }
+    Iterator end() { return Iterator(data + 3); }
+};
+
+// Usage
+MyContainer c;
+for (auto it = c.begin(); it != c.end(); ++it) {
+    std::cout << *it << std::endl;
+}
+```
+
+---
 
 ### Underlying Memory Allocator
 
-*Upcoming*
+STL containers allocate memory using allocators. By default, this is `std::allocator<T>`, but you can supply your own (for custom memory management).
+
+**Example:**
+```cpp
+#include <vector>
+#include <memory>
+
+std::vector<int, std::allocator<int>> v;
+
+struct MyAlloc : std::allocator<int> {
+    // Custom allocation logic here
+};
+std::vector<int, MyAlloc> custom_alloc_vec;
+```
+
+- Custom allocators can help with memory pools, tracking, or placement new.
+- Useful for embedded, performance-critical, or debug scenarios.
+
+---
 
 ### Custom Comparator
 
-*Upcoming*
+Comparators allow custom sorting or ordering in containers (`std::sort`, `std::set`, `std::map`).
+
+**Functor Example:**
+```cpp
+struct Desc {
+    bool operator()(int a, int b) const {
+        return a > b; // descending order
+    }
+};
+std::set<int, Desc> s = {3,1,2}; // stored as 3,2,1
+```
+
+**Lambda Comparator with std::sort:**
+```cpp
+std::vector<int> v = {5,2,9};
+std::sort(v.begin(), v.end(), [](int a, int b) { return a > b; }); // descending
+```
+
+- Comparator must return `true` if the first argument should go before the second.
+- Used to define ordering semantics for containers or algorithms.
+
+---
 
 ---
 
@@ -687,11 +783,60 @@ void f(T& t) { t.f(); }
 
 ### constexpr
 
-*Upcoming*
+`constexpr` specifies that the value of a variable or function can be evaluated at compile time. `constexpr` variables are implicitly `const`.
+
+Key rules and uses:
+- A `constexpr` variable must be initialized with a constant expression
+- A `constexpr` function can be evaluated at compile time if called with constant arguments, but can also run at runtime if needed at runtime (since C++14)
+- Enables compile-time computation and static assertions
+
+**Example:**
+```cpp
+constexpr int square(int x) { return x * x; }
+
+constexpr int value = square(5);  // Computed at compile time
+
+int runtime_val = square(10);  // Might be computed at runtime
+```
+
+**Compile-time array sizes:**
+```cpp
+constexpr size_t arr_size = 4;
+int arr[arr_size]; // OK
+```
+
+**Limitations:**
+- In C++11, `constexpr` functions can have only one return statement (relaxed in C++14+)
+- No dynamic memory allocation inside C++11 `constexpr` functions
+
+---
 
 ### consteval
 
-*Upcoming*
+`consteval` (since C++20) declares an **immediate function**: it *must* be evaluated at compile time, otherwise the code will not compile.
+
+- Enforces compile-time computation
+- Useful for code generation, checks, static interface validation
+
+**Example:**
+```cpp
+consteval int cube(int x) { return x * x * x; }
+
+// Always evaluated at compile time
+constexpr int c = cube(3); // OK
+
+// int d = cube(runtime_val); // ERROR: not a constant expression
+```
+
+**Contrast with `constexpr`:**
+- `constexpr` functions *may* execute at compile or runtime depending on context
+- `consteval` functions *must* execute at compile time
+
+---
+
+**When to use:**
+- Use `constexpr` for functions/variables that generally should work at compile time, but are also allowed at runtime
+- Use `consteval` for computations required at compile time (e.g., enforcing invariants, metaprogramming)
 
 ---
 
@@ -699,15 +844,110 @@ void f(T& t) { t.f(); }
 
 ### std::variant
 
-*Upcoming*
+`std::variant` is a type-safe union, introduced in C++17, that can hold one value out of a set of (unrelated) types at a time. It is often used to represent sum types or tagged unions in C++.
+
+**Example:**
+```cpp
+#include <variant>
+#include <string>
+#include <iostream>
+
+using MyVariant = std::variant<int, double, std::string>;
+
+void print_variant(const MyVariant& v) {
+    std::visit([](const auto& val) { std::cout << val << std::endl; }, v);
+}
+
+int main() {
+    MyVariant v = 42;
+    print_variant(v);     // prints 42
+
+    v = 3.14;
+    print_variant(v);     // prints 3.14
+
+    v = "hello";
+    print_variant(v);     // prints hello
+}
+```
+
+**Key Features:**
+- Enforces the active type (access with `std::get<T>` or `std::visit`)
+- Throws `std::bad_variant_access` on type mismatch
+- Can be used to replace a union with type-safety
+
+---
 
 ### Templated Lambdas
 
-*Upcoming*
+Templated lambdas (generic lambdas) allow you to write lambdas with `auto` in the parameter list. Introduced in C++14, extended in C++20 with explicit template syntax.
+
+**C++14 Example:**
+```cpp
+auto print = [](const auto& x) {
+    std::cout << x << std::endl;
+};
+
+print(1);        // prints 1
+print("hello");  // prints hello
+```
+
+**C++20 Example with explicit templates:**
+```cpp
+auto add = []<typename T, typename U>(T t, U u) {
+    return t + u;
+};
+
+std::cout << add(3, 4.2) << std::endl; // prints 7.2
+```
+
+**Use-cases:**
+- Cleaner functional transformations (with STL)
+- Works nicely with algorithms taking callable objects
+- Great for type deduction and generic code
+
+---
 
 ### std::ranges (Full Understanding)
 
-*Upcoming*
+`<ranges>` (C++20) radically modernizes algorithms and views in C++. It provides composable, type-safe, lazy operations over containers.
+
+**Key Concepts:**
+- **View:** A lightweight, non-owning “window”/adapter over a sequence (container or another view)
+- **Range-based algorithms:** Algorithms that work directly on ranges, not just pairs of iterators
+
+**Common Ranges:**
+- `std::views::filter`, `std::views::transform`, `std::views::take`, `std::views::drop` etc.
+
+**Example:**
+```cpp
+#include <ranges>
+#include <vector>
+#include <iostream>
+
+int main() {
+    std::vector<int> v = {1, 2, 3, 4, 5, 6};
+
+    // Compose pipeline: filter evens, square, take first 2
+    auto result = v | std::views::filter([](int x){ return x % 2 == 0; })
+                    | std::views::transform([](int x){ return x * x; })
+                    | std::views::take(2);
+
+    for (int n : result) {
+        std::cout << n << ' '; // Output: 4 16
+    }
+    std::cout << std::endl;
+}
+```
+
+**Features:**
+- Ranges are lazy (do not copy underlying data)
+- Enable expressive functional-style code (composable, pipeline-friendly)
+- Provide compile-time type safety for sequence transformation
+
+**Good to Know:**
+- Ranges work best with modern C++ standard library and containers
+- You can write your own range adaptors and compose them
+
 
 ---
 
@@ -715,27 +955,187 @@ void f(T& t) { t.f(); }
 
 ### Memory Ordering & Read-Write Consistency
 
-*Upcoming*
+**Memory ordering** controls how reads/writes to memory from multiple threads are observed. Without proper synchronization, one thread’s write may not immediately be visible to others: the CPU, compiler, or cache might reorder instructions (for speed) in ways that break thread safety.
+
+**Key Points:**
+- **Data Race:** Multiple threads access the same memory, at least one write, without synchronization → undefined behavior.
+- **Sequenced Consistency:** The default in C++; operations appear to all threads in the same order.
+- **Relaxed, Acquire, Release:** std::atomic lets you specify memory_order to control visibility and reordering.  
+    - **memory_order_relaxed:** No guarantees
+    - **memory_order_acquire:** No reads/writes before the acquire can be moved after
+    - **memory_order_release:** No reads/writes after the release can be moved before
+    - **memory_order_acq_rel, memory_order_seq_cst:** More/most strict
+
+> **Use Case:** Most concurrent code is safe just using `std::mutex` or atomic with default memory order; fine-tuning is for lock-free/wait-free or ultra-low-latency code.
+
+---
 
 ### std::atomic, Atomic Fences
 
-*Upcoming*
+Allows lock-free, thread-safe operations on single variables. No data races if all accesses are via atomic types.
+
+```cpp
+#include <atomic>
+#include <thread>
+#include <iostream>
+
+std::atomic<int> flag = 0;
+
+void writer() {
+    flag.store(1, std::memory_order_release);
+}
+
+void reader() {
+    while (flag.load(std::memory_order_acquire) == 0) {} // spin until flag is set
+    std::cout << "Flag set!" << std::endl;
+}
+```
+**Atomic fences** (`std::atomic_thread_fence`) provide memory barriers even when using non-atomic variables (rare outside low-level code):
+```cpp
+std::atomic_thread_fence(std::memory_order_acquire);
+// ... order all reads/writes before or after this point
+```
+
+---
 
 ### Mutex (std::mutex, std::shared_mutex, Read-Write Mutex)
 
-*Upcoming*
+Mutexes protect critical sections, allowing only one thread to access some code/data at a time.
+
+- **std::mutex:** Exclusive ownership. Only one thread can lock at once.
+- **std::lock_guard:** RAII pattern; auto-release.
+- **std::unique_lock:** More flexible; can lock/unlock/relock.
+- **std::shared_mutex (C++17+):** Multiple readers or one writer at a time.
+
+```cpp
+#include <mutex>
+#include <thread>
+
+std::mutex mtx;
+int shared_val = 0;
+
+void add() {
+    std::lock_guard<std::mutex> lock(mtx); // Automatically unlocks at scope exit
+    shared_val++;
+}
+```
+**Shared mutex (multiple readers, one writer):**
+```cpp
+#include <shared_mutex>
+std::shared_mutex rw_mtx;
+
+void reader() {
+    std::shared_lock lock(rw_mtx); // Many threads can hold shared_lock
+    // read shared data
+}
+
+void writer() {
+    std::unique_lock lock(rw_mtx); // Only one thread holds unique_lock
+    // modify shared data
+}
+```
+
+---
 
 ### Thread Safety & Reentrancy
 
-*Upcoming*
+- **Thread-safe:** Can be safely called by multiple threads *at the same time* (often uses mutexes or atomics for correctness).
+- **Reentrant:** Can be interrupted and called again on the same thread (e.g., via a signal/interrupt) and still work. All reentrant functions are thread-safe, but not all thread-safe functions are reentrant.
+
+**Why is reentrancy tricky?**  
+- Any use of static/non-local/local static/global variables makes code *non-reentrant* unless protected.
+
+```cpp
+// Thread-safe, not reentrant
+int counter = 0;
+std::mutex mtx;
+void inc() { std::lock_guard<std::mutex> _(mtx); counter++; }
+
+// Reentrant (no shared state or statics)
+void foo(int x) {
+    int local = x * 2;
+}
+```
+
+---
 
 ### Thread-Safe Queue
 
-*Upcoming*
+A common building block for producer/consumer. Use `std::queue` + `std::mutex` + `std::condition_variable`.
+
+```cpp
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+
+template<typename T>
+class ThreadSafeQueue {
+    std::queue<T> q;
+    mutable std::mutex mtx;
+    std::condition_variable cv;
+public:
+    void push(T value) {
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            q.push(std::move(value));
+        }
+        cv.notify_one();
+    }
+    T pop() {
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [&]{return !q.empty();});
+        T val = std::move(q.front());
+        q.pop();
+        return val;
+    }
+    bool empty() const {
+        std::lock_guard<std::mutex> lock(mtx);
+        return q.empty();
+    }
+};
+```
+**Usage:**  
+- Multiple producer/consumer threads can safely call push/pop
+
+---
 
 ### Thread-Safe Ring Buffer
 
-*Upcoming*
+A ring buffer (circular queue) is often used for high-performance producer/consumer patterns (e.g. logging, audio, or low-latency queues).
+
+**Thread-safe, single-producer/single-consumer example:**
+
+```cpp
+#include <vector>
+#include <atomic>
+
+template<typename T, size_t N>
+class RingBuffer {
+    std::vector<T> buffer;
+    std::atomic<size_t> head{0}, tail{0};
+public:
+    RingBuffer() : buffer(N) {}
+    bool push(const T& item) {
+        size_t h = head.load(std::memory_order_relaxed);
+        size_t t = tail.load(std::memory_order_acquire);
+        if (((h + 1) % N) == t) return false; // full
+        buffer[h] = item;
+        head.store((h + 1) % N, std::memory_order_release);
+        return true;
+    }
+    bool pop(T& item) {
+        size_t t = tail.load(std::memory_order_relaxed);
+        size_t h = head.load(std::memory_order_acquire);
+        if (t == h) return false; // empty
+        item = buffer[t];
+        tail.store((t + 1) % N, std::memory_order_release);
+        return true;
+    }
+};
+```
+- SPSC (single-producer single-consumer) fast/no locks.  
+- For MPSC/MPSC, use mutex/condition_variable in a `std::vector` or consider `concurrentqueue` libraries or lock-free tricks.
+
 
 ---
 
@@ -743,23 +1143,70 @@ void f(T& t) { t.f(); }
 
 ### snprintf family
 
-*Upcoming*
+- **snprintf, sprintf, vsnprintf**: Functions for formatting output to strings, safer than `sprintf` (avoids buffer overflows).
+  ```cpp
+  char buf[100];
+  snprintf(buf, sizeof(buf), "Number: %d", 42);
+  ```
+  **Points:**
+  - Always give buffer size to prevent overflows.
+  - Returns the number of characters that would have been written if enough space was available—allows truncation checks.
+  - Use `snprintf` instead of `sprintf` whenever possible.
+  - Handles all the format specifiers you see in printf-family.
+  - Useful for C API or embedded situations.
 
 ### String Streams
 
-*Upcoming*
+- **std::ostringstream, std::istringstream, std::stringstream:** C++ streams for manipulating strings in memory.
+  ```cpp
+  #include <sstream>
+  int n = 42; std::ostringstream oss;
+  oss << "Result: " << n;
+  std::string s = oss.str();
+  ```
+  **Points:**
+  - Safer and type-safe compared to manual `sprintf`/parsing.
+  - Automatic type conversions, builds up strings with `<<` operator.
+  - `std::istringstream` for parsing from a string (like tokenizing).
+  - Can overload `operator<<`/`operator>>` to control your class's string conversions.
+  - Avoids format string bugs.
 
 ### Ordering in Streams
 
-*Upcoming*
+- **Streams maintain internal order** — Output/inputs are processed in the order streamed.
+- Manipulators (like `std::setw`, `std::fixed`, etc) alter formatting:
+  ```cpp
+  #include <iomanip>
+  std::cout << std::setw(6) << 7; // prints "     7"
+  ```
+- **Points:**
+  - Output is ordered left-to-right as written in code.
+  - Buffering can affect *when* output appears (flush with `std::endl` or `std::flush`).
+  - Locale and formatting (number separators, precision, etc) can be controlled per-stream.
 
 ### Character Buffers vs Data Buffers (Efficiency)
 
-*Upcoming*
+- **Character Buffer**: Array of bytes/chars (e.g. `char buf[256]`)
+- **Data Buffer**: Can be more general (raw memory, binary blobs, `std::vector<uint8_t>`)
+- **Points:**
+  - For *text*: prefer `std::string` or `std::ostringstream` for safety and flexibility.
+  - For *binary*: use `std::vector<uint8_t>`, proper alignment and manual memory management.
+  - Avoid fixed-size C arrays unless required; prefer RAII types.
+  - For I/O efficiency, minimize copy and prefer direct read/write using pointers if safe.
 
 ### Argument Passing Techniques
 
-*Upcoming*
+- **Pass by Value**: Copies the argument (may be expensive for large objects).
+- **Pass by Reference (&)**: No copy, can modify original.
+- **Pass by Const Reference (const &)**: No copy, can’t modify.
+- **Pass by Pointer (\*)**: Similar to reference, but can be nullptr (useful for optional arguments).
+- **Pass by Rvalue Reference (&&)**: For move semantics.
+- **Points:**
+  - For small/primitive types, pass by value (int, double, etc.).
+  - For large objects, pass by `const&` unless modification/move is wanted.
+  - For ownership transfer, use move semantics (`&&`).
+  - Avoid `const T` by value (confusing, wasteful).
+  - Standard C in/out patterns use pointers (`int func(int *outval)`).
 
 ---
 
@@ -767,35 +1214,219 @@ void f(T& t) { t.f(); }
 
 ### malloc, calloc, free
 
-*Upcoming*
+- **malloc**: Allocates raw/uninitialized memory.
+- **calloc**: Allocates zero-initialized memory.
+- **free**: Releases memory.
+  ```c
+  int* arr = (int*) malloc(10 * sizeof(int));
+  free(arr);
+  ```
+- **Points:**
+  - Returns `NULL` on allocation failure.
+  - Always pair `malloc/calloc` with `free`.
+  - Typecasting not needed in C, but required in C++.
+  - For C++, prefer `new[]`/`delete[]` or smart pointers.
 
 ### memset, memcpy
 
-*Upcoming*
+- **memset**: Sets all bytes to a value (typically for zeroing or initialization).
+  `memset(buf, 0, nbytes);`
+- **memcpy**: Copies raw bytes between memory regions.
+  `memcpy(dst, src, nbytes);`
+- **Points:**
+  - Works on raw memory; use carefully (watch for struct padding or C++ class objects).
+  - Fast but not type-safe. Never use with non-trivial types or STL containers.
+  - Prefer `std::fill` or `std::copy` for C++ containers.
 
-### ioctl
+### ioctl (Input/Output Control)
 
-*Upcoming*
+- **What is ioctl?**  
+  `ioctl` is a powerful Unix/Linux system call that allows user programs to send device-specific commands to file descriptors. Unlike read/write—which transfer data—ioctl provides a generic way to control hardware or kernel objects, set options, and query or alter behavior not exposed by standard APIs.
 
-### select, poll
+  ```c
+  #include <sys/ioctl.h>
+  int ret = ioctl(int fd, unsigned long request, void *arg);
+  ```
 
-*Upcoming*
+- **Key concepts and uses:**
+  - Often used to control or query device drivers (network interfaces, serial ports, block devices, etc).
+  - The meaning of `request` and the contents of `arg` are device-specific; you must consult the specific driver header/docs.
+  - Can control low-level aspects that normal read/write operations cannot, e.g. toggling special device features.
+
+- **Examples:**
+  - **Network interfaces:** Get/set interface flags, MAC addresses, or MTU on sockets.
+  - **Terminals:** Setline settings (baud rate, canonical mode) with `tcsetattr`.
+  - **Embedded systems:** Control GPIO pins, such as toggling output voltage or reading pin state, e.g. on a Raspberry Pi or microcontroller Linux board.
+  - **Example – Setting a GPIO pin (pseudo-code):**
+    ```c
+    int gpio_fd = open("/dev/gpiochip0", O_RDWR);
+    struct gpiohandle_request req = { ... }; // Fill with lines & flags
+    ioctl(gpio_fd, GPIO_GET_LINEHANDLE_IOCTL, &req);
+    ```
+    *Here, device-specific request codes and data structures are used; you must consult hardware documentation.*
+
+- **Cautions:**
+  - Return value is -1 on error, with details in `errno`.
+  - Not portable across devices or OS variants—requests are specific to the kernel and hardware.
+  - Where possible, prefer portable or higher-level C/C++ abstractions.
+
+---
+
+### mmap (Memory Mapping)
+
+- **What is mmap?**  
+  `mmap` allows mapping a file or device into the process address space, enabling direct memory access to data without explicit copying or system calls for each operation—this is vital for high-throughput I/O.
+
+  ```c
+  #include <sys/mman.h>
+  void* addr = mmap(NULL, length, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+  ```
+
+- **Significance and common uses:**
+  - **Zero-copy buffers:** Use in network switches/routers to provide user space applications with direct access to huge packet buffers for wire-speed traffic processing.
+  - **Shared memory:** Fast IPC (Inter-Process Communication) by mapping the same file/device into multiple processes.
+  - **Memory-mapped I/O:** Directly read/write device memory (framebuffers, PCI cards), critical in embedded and hardware programming.
+
+- **Example:**
+  - **Network switch buffers:**  
+    Networking code for switch ASICs often uses `mmap` to map hardware packet buffers into user space, greatly reducing copy overhead and increasing throughput (used in DPDK, netmap, etc.).
+  - **Simple example – mapping a file:**
+    ```c
+    int fd = open("data.bin", O_RDWR);
+    void* buf = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    // Now buf can be accessed like a memory array.
+    ```
+
+---
+
+### select, poll, libevent2
+
+- **select**: Classic system call for monitoring multiple file descriptors to see if I/O is possible (read/write/exception). It modifies user-supplied sets using macros like `FD_SET`, `FD_ZERO`. Note: Limited by fixed-size sets, usually 1024 FDs.
+- **poll**: Scalable alternative, overcomes select's FD_SET size cap, uses an array of `struct pollfd` for arbitrary numbers of file descriptors.
+- **libevent2**: Modern, portable user-space event loop library that wraps `select`, `poll`, and more advanced OS facilities (`epoll`/`kqueue`). Handles timers, signals, and async I/O with a unified API.
+
+- **Use-cases and notes:**
+  - All are used in event-driven servers (web servers, proxies, etc.) and network programming for handling many concurrent sockets without spinning up a thread per connection.
+  - `select` and `poll` are low-level; as workloads scale, use platform-specific event loops (`epoll` on Linux, `kqueue` on BSD/macOS) or libraries like `libevent2` which abstract over them.
+  - Always handle errors carefully, and understand the difference between level-triggered and edge-triggered I/O for high scalability.
 
 ---
 
 ## Attributes & Bit Tricks
 
-### Compiler Attributes ([[nodiscard]], [[likely]], aligned, etc.)
+### Compiler Attributes (`[[nodiscard]]`, `[[likely]]`, `alignas`, etc.)
 
-*Upcoming*
+Modern C++ introduces attributes to tell the compiler (and readers) about intent or special handling of code. These improve code safety, help with optimizations, or suppress warnings.
+
+- `[[nodiscard]]`
+    - If a function's return value is `[[nodiscard]]`, ignoring it produces a warning/error.
+    ```cpp
+    [[nodiscard]] int compute();
+    compute(); // warning: result unused
+    ```
+
+- `[[maybe_unused]]`
+    - Suppress warnings for unused variables or functions.
+
+    ```cpp
+    [[maybe_unused]] int x = compute();
+    ```
+
+- `[[likely]]` and `[[unlikely]]` (C++20)
+    - Hints to the compiler about which branch is more probable.
+
+    ```cpp
+    if (condition [[likely]]) {
+        // more likely branch
+    } else {
+        // less likely branch
+    }
+    ```
+
+- `alignas`, `alignof`
+    - Specify or query memory alignment.
+
+    ```cpp
+    alignas(16) struct S { int a[4]; };
+    static_assert(alignof(S) == 16);
+    ```
+
+- `__attribute__((warn_unused_result))`, `__attribute__((packed))`
+    - GCC/Clang extensions for similar purposes.
 
 ### Bitwise Operations
 
-*Upcoming*
+Bitwise operators are low-level tools for manipulating data at the bit level.
+
+| Operator     | Purpose                       |
+| ------------ | ---------------------------- |
+| `&`          | Bitwise AND                   |
+| `|`          | Bitwise OR                    |
+| `^`          | Bitwise XOR                   |
+| `~`          | Bitwise NOT (complement)      |
+| `<<`         | Left shift                    |
+| `>>`         | Right shift (sign-propagating)|
+
+**Examples:**
+
+```cpp
+unsigned x = 0b1010;
+
+// Set bit 2
+x |= (1 << 2); // x is now 0b1110
+
+// Clear bit 1
+x &= ~(1 << 1); // x is now 0b1100
+
+// Toggle bit 0
+x ^= (1 << 0); // x is now 0b1101
+
+// Check if bit 1 is set
+bool b = (x & (1 << 1)) != 0; // false
+```
 
 ### Bit Flags / Enum Flags
 
-*Upcoming*
+Bit flags allow you to store multiple boolean options efficiently within a single integer.
+
+#### Defining and using bit flags:
+
+```cpp
+enum Permission : unsigned {
+    Read    = 1 << 0, // 0b0001
+    Write   = 1 << 1, // 0b0010
+    Execute = 1 << 2, // 0b0100
+};
+
+// Combine flags
+unsigned mode = Read | Write;
+
+// Check if flag is set
+if (mode & Write) { /* ... */ }
+
+// Remove a flag
+mode &= ~Read;
+
+// Toggle a flag
+mode ^= Execute;
+```
+
+#### C++11: `enum class` with bitwise operators
+
+C++ does not automatically provide bitwise operators for `enum class`. If needed, define them:
+
+```cpp
+enum class Options : uint32_t {
+    None    = 0,
+    Alpha   = 1 << 0,
+    Beta    = 1 << 1,
+    Gamma   = 1 << 2,
+};
+
+inline Options operator|(Options a, Options b) {
+    return static_cast<Options>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
+}
+```
 
 ---
 
@@ -803,36 +1434,171 @@ void f(T& t) { t.f(); }
 
 ### std::function and std::bind
 
-*Upcoming*
+- **`std::function`**: A type-erased, copyable wrapper for any callable object—functions, lambdas, bind expressions, or functors:
+    ```cpp
+    #include <functional>
+    void foo(int x) { /* ... */ }
+    std::function<void(int)> f = foo;
+    f(42);
 
-### Coroutine Basics (co_yield, co_return, co_await)
+    auto lambda = [](int x) { return x + 1; };
+    std::function<int(int)> g = lambda;
+    int res = g(5); // 6
+    ```
 
-*Upcoming*
+- **`std::bind`**: Creates callable objects with some arguments "pre-set" (partial application).
+    ```cpp
+    #include <functional>
+    void add(int a, int b);
+    auto add_five = std::bind(add, 5, std::placeholders::_1);
+    add_five(7); // equivalent to add(5, 7)
+    ```
 
-### CRTP (Curiously Recurring Template Pattern)
+- **When to use?**
+    - Passing callbacks to APIs, event handlers in GUI/networking code, implementing generic function containers (like command patterns).
 
-*Upcoming*
+### Coroutine Basics (`co_yield`, `co_return`, `co_await`)
 
-### SFINAE & enable_if, if constexpr
+Coroutines (C++20) enable asynchronous and lazy computations by allowing functions to suspend/resume.
 
-*Upcoming*
+**Examples:**
 
-### Type Traits & decltype, std::is_* utilities
+```cpp
+#include <coroutine>
+#include <iostream>
 
-*Upcoming*
+struct Generator {
+    struct promise_type {
+        int current_value;
+        auto get_return_object() { return Generator{Handle::from_promise(*this)}; }
+        std::suspend_always initial_suspend() { return {}; }
+        std::suspend_always final_suspend() noexcept { return {}; }
+        std::suspend_always yield_value(int value) { current_value = value; return {}; }
+        void return_void() {}
+        void unhandled_exception() { std::terminate(); }
+    };
 
-### Smart Pointers (unique_ptr, shared_ptr, custom deleters)
+    using Handle = std::coroutine_handle<promise_type>;
+    Handle h;
 
-*Upcoming*
+    Generator(Handle h): h(h) {}
+    ~Generator() { if (h) h.destroy(); }
+
+    bool next() {
+        if (!h.done()) h.resume();
+        return !h.done();
+    }
+    int value() const { return h.promise().current_value; }
+};
+
+Generator numbers() {
+    for (int i = 0; i < 3; ++i)
+        co_yield i;
+}
+
+int main() {
+    auto g = numbers();
+    while (g.next())
+        std::cout << g.value() << std::endl;
+}
+```
+
+- `co_yield`: produces a value, suspends coroutine, resumes later.
+- `co_return`: completes the coroutine, can return a value.
+- `co_await`: suspends until an awaited operation completes (used for async IO, etc.).
 
 ### RAII and Scope Guards
 
-*Upcoming*
+**RAII (Resource Acquisition Is Initialization):**
+- C++ idiom—resources are tied to object lifetimes.
+- Constructor acquires resource, destructor releases.
+
+**Example:**
+
+```cpp
+class FileGuard {
+    FILE* f;
+public:
+    FileGuard(const char* fname) : f(fopen(fname, "r")) {}
+    ~FileGuard() { if (f) fclose(f); }
+    FILE* get() const { return f; }
+};
+
+void read_something() {
+    FileGuard guard("data.txt");
+    // Use guard.get()
+    // File is auto-closed at scope exit, even on exceptions.
+}
+```
+
+**Scope Guards** (C++17): Use lambdas or utilities (`std::unique_ptr` with custom deleter, `boost::scope_exit`, etc.) for cleanup code on scope exit.
+
+```cpp
+#include <iostream>
+#include <functional>
+
+void f() {
+    auto cleanup = []{ std::cout << "Done!\n"; };
+    // ... code ...
+    cleanup();
+}
+```
+Or, with C++14/C++17:
+```cpp
+auto guard = std::unique_ptr<void, decltype([](void*){ cleanup(); })>(
+    nullptr, [](void*){ cleanup(); });
+```
 
 ### PImpl Idiom (Pointer to Implementation)
 
-*Upcoming*
+**PImpl (Private Implementation) idiom** hides implementation details and reduces compile-time dependencies.
+
+**Example:**
+
+```cpp
+// In header:
+class MyClass {
+    struct Impl;
+    std::unique_ptr<Impl> impl;
+public:
+    MyClass();
+    ~MyClass();
+    void foo();
+};
+```
+```cpp
+// In source:
+struct MyClass::Impl {
+    // data, methods
+};
+MyClass::MyClass() : impl(new Impl) {}
+MyClass::~MyClass() = default;
+void MyClass::foo() { /* impl->... */ }
+```
+- Changes to `Impl` don't force recompilation of code including the header.
+- Reduces header bloat, speeds up builds.
 
 ### C++ Modules (C++20+)
 
-*Upcoming*
+**C++20 Modules** provide a new way to organize code for better reuse and compilation speed (instead of textual `#include`s).
+
+**Basic module usage:**
+
+```cpp
+// math.ixx
+export module math;
+export int add(int a, int b) { return a + b; }
+```
+```cpp
+// use.cpp
+import math;
+#include <iostream>
+int main() {
+    std::cout << add(3, 4) << std::endl; // prints 7
+}
+```
+- `export module <name>;` declares a module.
+- `export` exposes functions/types to importers.
+- Use `import <name>;` instead of `#include`.
+- Faster builds, no ODR problems, can better encapsulate private/internal details.
+
