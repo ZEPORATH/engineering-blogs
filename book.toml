@@ -12,4 +12,4 @@ additional-js = ["theme/header.js", "mermaid.min.js", "mermaid-init.js"]
 command = "mdbook-mermaid"
 
 [output.html.playground]
-editable = false
+editable = true
