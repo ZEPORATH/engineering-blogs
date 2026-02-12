@@ -14,3 +14,7 @@
   - [Concurrency](./cpp-notes/concurrency.md)
   - [Low-level & System Programming](./cpp-notes/low-level-system.md)
   - [Advanced Topics](./cpp-notes/advanced-topics.md)
+- [Setting up HomeLab](./homelab-setup/init.md)
+  - [Inspirations and Resources](./homelab-setup/inspirations-resources.md)
+  - [Pitfalls and Regrets](./homelab-setup/pitfals-resources.md)
+  - [Success](./homelab-setup/final-report.md)

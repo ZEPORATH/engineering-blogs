@@ -6,4 +6,10 @@ language = "en"
 
 [output.html]
 additional-css = ["theme/custom.css"]
-additional-js = ["theme/header.js"]
+additional-js = ["theme/header.js", "mermaid.min.js", "mermaid-init.js"]
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html.playground]
+editable = false
