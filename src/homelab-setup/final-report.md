@@ -217,7 +217,7 @@ flowchart TB
     end
     
     subgraph HDD[2TB External HDD - Photo Archive]
-        H1[HoneymoonPics folder]
+        H1[VacationPhotos folder]
         H2[Family2020 folder]
         H3[phone_sync folder]
         H4[India2015 folder]
@@ -581,7 +581,7 @@ volumes:
 ```
 /media/2tb_external/mypics/
 ├── 2010/
-│   ├── Honeymoon/
+│   ├── Vacation2010/
 │   │   ├── IMG_001.jpg
 │   │   └── IMG_002.jpg
 │   └── Family/
@@ -753,7 +753,7 @@ No VPN configuration. No port forwarding. No "please allow personal VPN on corpo
 
 ### Short Term (Next 3 Months)
 - [ ] Automated Restic backups to Backblaze B2
-- [ ] Reverse proxy with Traefik (proper subdomains: `photos.raut.ts.net`)
+- [ ] Reverse proxy with Traefik (proper subdomains: `photos.homelab.ts.net`)
 - [ ] SSL certificates for all services
 - [ ] PhotoPrism Plus subscription (support developers, unlock multi-user)
 - [ ] Thermal repaste (improve cooling efficiency)

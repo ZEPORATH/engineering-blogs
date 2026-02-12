@@ -338,7 +338,7 @@ sensors
 
 /media/2tb_external/
 └── mypics/
-    ├── HoneymoonPics/
+    ├── VacationPhotos/
     ├── phone_sync/
     └── ...
 ```

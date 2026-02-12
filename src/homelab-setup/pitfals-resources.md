@@ -54,13 +54,13 @@ curl -fsSL https://get.docker.com | sudo sh
 
 **What Went Wrong**:
 - **Folder Organization**: Immich treats folders as implementation details, not organizational structure
-- **Legacy Photos**: 20+ years of organized folders (`/Honeymoon2010/`, `/India2015/`, etc.) became a chronological soup
+- **Legacy Photos**: 20+ years of organized folders (`/Vacation2010/`, `/India2015/`, etc.) became a chronological soup
 - **Folder View**: Technically exists but requires external library setup, still limited
 - **Philosophy Mismatch**: Immich wants to be Google Photos (timeline-first), not a file browser
 
 **The Decision Point**:
 ```
-User: "How do I see my HoneymoonPics folder in Immich like I can in PhotoPrism?"
+User: "How do I see my VacationPhotos folder in Immich like I can in PhotoPrism?"
 Reality: "You create an external library, scan it, then search for it, 
           but it still shows in a timeline mixed with everything else."
 ```
